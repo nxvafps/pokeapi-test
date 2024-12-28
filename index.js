@@ -11,7 +11,8 @@ const getMove = async (move) => {
     return {
       name: response.data.name,
       type: response.data.type.name,
-      category: response.data.damage_class.name,
+      damage_class: response.data.damage_class.name,
+      category: response.data.meta.category.name,
       target: response.data.target.name,
       power: response.data.power,
       accuracy: response.data.accuracy,
@@ -40,9 +41,13 @@ const getPokemon = async (pokemon) => {
     const moves = await Promise.all(
       response.data.moves.map(async (move) => await getMove(move.move.name))
     );
+    const abilities = response.data.abilities.map((ability) => ({
+      name: ability.ability.name,
+    }));
     return (pokemonData = {
       name: response.data.name,
       number: response.data.id,
+      abilities: abilities,
       types: {
         1: response.data.types[0].type.name,
         2: response.data.types[1].type.name,
@@ -62,9 +67,17 @@ const getPokemon = async (pokemon) => {
   }
 };
 
+// (async () => {
+//   const garchomp = await getPokemon("garchomp");
+//   console.log(garchomp.moves[42]);
+// })();
 (async () => {
-  const garchomp = await getPokemon("garchomp");
-  console.log(garchomp.moves[42]);
+  // const fakeOut = await getMove("fake-out");
+  // const gigaDrain = await getMove("giga-drain");
+  // const ancientPower = await getMove("ancient-power");
+  const gible = await getPokemon("gible");
+  console.log(gible);
+  // console.log(fakeOut);
+  // console.log(gigaDrain);
+  // console.log(ancientPower);
 })();
-
-// getMove("Tackle");
